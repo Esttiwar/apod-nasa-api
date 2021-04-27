@@ -9,11 +9,29 @@
         .then((res) => (res.ok ? res.json() : Promise.reject(res)))
         .then((json) => {
             console.log(json)
-
             const $title = document.querySelector(".title").textContent = `${json.title}`;
-            const $author = document.querySelector(".author").textContent = `Author: ${json.copyright}`;
+
+
+            if (!json.copyright) {
+                let $author = document.querySelector(".author").textContent = `Author: Unmentioned`; 
+            }else {
+                $author = document.querySelector(".author").textContent = `Author: ${json.copyright}`;
+            }
+
             const $date = document.querySelector(".date").textContent = `${json.date}`;
-            const $img = document.querySelector("img").setAttribute("src", json.url);
+
+            if (json.url.startsWith("https://www.youtube.com")) {  
+                const $iframe = document.querySelector(".iframe-video");
+                $iframe.setAttribute("src", json.url);
+
+            }else {
+                const $iframe = document.querySelector(".iframe-video");
+                $iframe.style.display = "none";
+                const $img = document.querySelector(".img-apod");
+                $img.setAttribute("src", json.url);
+                $img.style.display = "flex";
+            }       
+
             const $explanation = document.querySelector(".explanation").textContent = `${json.explanation}`;
             
         })
